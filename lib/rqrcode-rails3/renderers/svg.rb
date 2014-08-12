@@ -15,7 +15,6 @@ module RQRCode
           unit    = options[:unit]        || 11
           offset_left = options[:offset_left].to_i || 0
           offset_top = options[:offset_top].to_i || 0
-          options[:text]  =1000000011
           text_dimension = 0
           #text_dimension = 60 if options[:text] 
           # height and width dependent on offset and QR complexity
