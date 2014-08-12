@@ -18,6 +18,8 @@ module RQRCode
     qrcode = RQRCode::QRCode.new(string, :size => size, :level => level)
     svg    = RQRCode::Renderers::SVG::render(qrcode, options)
 
+    puts "size #{size}"
+
     if format && format == :svg
       svg
     else
