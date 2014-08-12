@@ -13,23 +13,25 @@ module RQRCode
           offset  = options[:offset].to_i || 0
           color   = options[:color]       || "000"
           unit    = options[:unit]        || 11
+          offset_left = options[:offset_left].to_i || 0
+          offset_top = options[:offset_top].to_i || 0
           options[:text]  =1000000011
           text_dimension = 0
-          text_dimension = 100 if options[:text] 
+          #text_dimension = 60 if options[:text] 
           # height and width dependent on offset and QR complexity
-          dimension = (qrcode.module_count*unit) + (2*offset)
-          width = dimension + text_dimension
-          height = dimension
+          dimension = (qrcode.module_count*unit) + offset_left + offset_top
+          width = dimension  + text_dimension
+          height = dimension + text_dimension
           xml_tag   = %{<?xml version="1.0" standalone="yes"?>}
-          open_tag  = %{<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ev="http://www.w3.org/2001/xml-events" width="#{width}" height="#{dimension}">}
+          open_tag  = %{<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ev="http://www.w3.org/2001/xml-events" width="#{width}" height="#{height}">}
           close_tag = "</svg>"
 
           result = []
           qrcode.modules.each_index do |c|
             tmp = []
             qrcode.modules.each_index do |r|
-              y = c*unit + offset
-              x = r*unit + offset
+              y = c*unit + offset_top
+              x = r*unit + offset_left
 
               next unless qrcode.is_dark(c, r)
               tmp << %{<rect width="#{unit}" height="#{unit}" x="#{x}" y="#{y}" style="fill:##{color}"/>}
@@ -38,10 +40,10 @@ module RQRCode
           end
 
           if options[:text]
-            x = offset +20
-            y = qrcode.module_count*unit + offset + unit+10
-            result.unshift %{<text x="#{y}" y="#{x}" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="##{color}">一卡通编号：</text>}
-            result.unshift %{<text x="#{y}" y="#{x+30}" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="##{color}">#{options[:text]}</text>}
+            x = offset_left
+            y = qrcode.module_count*unit + offset_top + 20
+            # result.unshift %{<text x="#{x}" y="#{y}" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="##{color}">一卡通编号：</text>}
+            result.unshift %{<text x="#{x}" y="#{y}" font-family="Helvetica, Arial, sans-serif" font-size="18" fill="##{color}">#{options[:text]}</text>}
           end
           
           if options[:fill]
