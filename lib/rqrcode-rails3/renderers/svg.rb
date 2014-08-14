@@ -15,12 +15,12 @@ module RQRCode
           unit    = options[:unit]        || 11
           offset_left = options[:offset_left].to_i || 0
           offset_top = options[:offset_top].to_i || 0
-          text_dimension = 0
+          text_dimension = 30
           #text_dimension = 60 if options[:text] 
           # height and width dependent on offset and QR complexity
-          dimension = (qrcode.module_count*unit) + offset_left + offset_top
-          width = dimension  + text_dimension
-          height = dimension + text_dimension
+          dimension = (qrcode.module_count*unit) 
+          width = dimension  + (2*offset_left)
+          height = dimension + offset_top  + text_dimension
           xml_tag   = %{<?xml version="1.0" standalone="yes"?>}
           open_tag  = %{<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ev="http://www.w3.org/2001/xml-events" width="#{width}" height="#{height}">}
           close_tag = "</svg>"
@@ -42,7 +42,7 @@ module RQRCode
             x = offset_left
             y = qrcode.module_count*unit + offset_top + 20
             # result.unshift %{<text x="#{x}" y="#{y}" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="##{color}">一卡通编号：</text>}
-            result.unshift %{<text x="#{x}" y="#{y}" font-family="Helvetica, Arial, sans-serif" font-size="18" fill="##{color}">#{options[:text]}</text>}
+            result.unshift %{<text x="#{x}" y="#{y}" font-family="Helvetica, Arial, sans-serif" font-size="24" fill="##{color}">#{options[:text]}</text>}
           end
           
           if options[:fill]
